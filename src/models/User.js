@@ -20,6 +20,13 @@ const UserSchema = new mongoose.Schema({
     verifyToken:{
         type : String,
         default : null
+    },
+    forgotPasswordToken:{
+        type : String,
+        default : null,
+    },
+    tokenValidity:{
+        type:Date,
     }
 })
 const User = mongoose.models.users || mongoose.model('users',UserSchema); 
