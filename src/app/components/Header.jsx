@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 function Header() {
   const router = useRouter();
+  const cookies = Cookies.get('token');
 
   function logout() {
     // Remove the token from cookies
@@ -19,8 +20,8 @@ function Header() {
         Work Manager
       </Link>
       <div className="flex justify-center flex-grow">
-        <Link href="/cis/status" className="ml-3 hover:text-sky-600 underline">
-          Status
+        <Link href="/cis/book_appointment" className="ml-3 hover:text-sky-600 underline">
+          Book Appointment
         </Link>
         <Link href="/cis/addtask" className="ml-3 hover:text-sky-600 underline">
           Add task
@@ -28,13 +29,13 @@ function Header() {
         <Link href="/cis/showtask" className="ml-3 hover:text-sky-600 underline">
           Show task
         </Link>
-      
+
       </div>
-      
-        <button onClick={logout} className="hover:text-sky-600 underline">
-          Logout
-        </button>
-        {/* <Link href='/register' className="hover:text-sky-600 pl-2 underline">Register</Link> */}
+
+      <button onClick={cookies ? logout : () => { router.push('login') }} className="hover:text-sky-600 border-2 underline">
+        {cookies ? 'Logout' : 'Login/Signup'}
+      </button>
+      {/* <Link href='/register' className="hover:text-sky-600 pl-2 underline">Register</Link> */}
 
     </nav>
   );

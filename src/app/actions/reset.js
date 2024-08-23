@@ -1,5 +1,6 @@
 "use server"
 
+import dbconnection from "@/helper/db"
 import mailer from "../utils/mailer"
 import User from "@/models/User"
 const { NextResponse } = require("next/server")
@@ -7,15 +8,16 @@ const { NextResponse } = require("next/server")
 
 export async function handlReset(e) {
     try {
-
+        dbconnection()
         // return true;
         console.log(e)   
         // const nex = {name : 'derm', success : true}
         // console.log(nex)
         // return JSON.stringify(nex)
-        const userExists = await User.findOne({ email: e.em})
+        const temp = {email : e.em}
+        console.log(temp)
+        const userExists = await User.findOne(temp)
         // const userExists = false
-        console.log(userExists)
         
         if (!userExists) {
             return JSON.stringify({

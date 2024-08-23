@@ -14,7 +14,7 @@ const mailer = async ({ email, emailType, id }) => {
     } else if (emailType === "ForgotPassword") {
       await User.findByIdAndUpdate(id, {
         forgotPasswordToken: hashed,
-        tokenValidity: Date.now() + 360000,
+        tokenValidity: Date.now() + 3600000,    // in js time is specified in millisecond and this validity time for token validity which will expire after 6 mins but for testing I have set it to 1hr. 
       });
     }
     const transport = nodemailer.createTransport({
@@ -25,11 +25,32 @@ const mailer = async ({ email, emailType, id }) => {
         pass: process.env.MAIL_PASS,
       },
     });
-
-    const content = `<p>Click here to ${emailType === "Verify" ? "Verify" : "Reset Password"
-      }
-    <a href ="${process.env.DOMAIN}/${emailType === "Verify" ? "verification" : "new_password"
-      }">${hashed}</a></p>`;
+    // <button className="bg-blue-500 hover:bg-blue-400 mb-5 rounded-sm">
+    // {/* </button> }
+    const content = `
+      <div className="rounded-md shadow-md w-96">
+                <div className="flex justify-center items-center bg-slate-100">
+                    <img
+                        src="https://www.google.com/logos/doodles/2024/paris-games-breaking-6753651837110566-s.png"
+                        alt="logo"
+                    ></img>
+                </div>
+                <hr />
+                <h2 className="text-md font-semibold mb-4 mt-5 ">
+                        Hey ${email},
+                    </h2>
+                <div className="text-center">
+                    
+                    <p>Click here to ${emailType === "Verify" ? "Verify" : "Reset Password"}<br />
+                       
+                        <a href ="${process.env.DOMAIN}/${emailType === "Verify" ? "new_password" : "verification"
+                      }/${hashed}/${id}">${emailType === "Verify" ? "Verify" : "Reset Password"} ${process.env.DOMAIN}/${emailType === "Verify" ? "new_password" : "verification"
+                    }/${hashed}/${id}</a> 
+                    </p> 
+                </div>
+                <hr/>
+                <footer className="bg-slate-100 text-center">Sent by Dermiatric <br/> <p className="text-center">Address</p></footer>
+            </div>`;
 
     const info = {
       from: '"emailwa 👻" <maddison53@ethereal.email>',
